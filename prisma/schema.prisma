@@ -1,0 +1,85 @@
+
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // uses connection pooling
+  directUrl = env("DATABASE_URL_UNPOOLED") // uses a direct connection
+}
+
+enum UserRole {
+ ADMIN
+ USER
+}
+
+model User {
+ id              String  @id @default(cuid())
+ firstName       String
+ lastName        String 
+ email           String       @unique 
+ active          Boolean      @default(false)
+ profileImage    String? 
+ role            UserRole     @default(USER)
+ createdAt       DateTime     @default(now())
+ updatedAt       DateTime     @updatedAt
+
+}
+
+
+
+model UserSettings {
+  userId         String @id             
+  currency       String    
+  
+          
+}
+
+model Transaction {
+    id            String  @id @default(cuid())
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    amount        Float
+    description   String  
+    date          DateTime        
+    type          String      @default("income")
+    category      String
+    categoryIcon  String
+    userId        String 
+
+    
+}
+
+model Category {
+    id            String  @id @default(cuid())
+    name          String   
+    icon          String   
+    type          String   @default("income")
+    createdAt     DateTime @default(now())
+    userId        String   
+    
+
+    @@unique([name, userId, type])
+}
+
+model MonthHistory {
+    id            String @id @default(cuid()) 
+    day           Int
+    month         Int
+    year          Int
+    income        Float
+    expense       Float
+    userId        String 
+}
+
+model YearHistory {
+    id            String @id @default(cuid()) 
+    month         Int
+    year          Int
+    income        Int
+    expense       Int
+    userId        String  
+}
