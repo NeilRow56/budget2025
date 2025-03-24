@@ -16,21 +16,6 @@ enum UserRole {
  USER
 }
 
-model User {
- id              String  @id @default(cuid())
- firstName       String
- lastName        String 
- email           String       @unique 
- active          Boolean      @default(false)
- profileImage    String? 
- role            UserRole     @default(USER)
- createdAt       DateTime     @default(now())
- updatedAt       DateTime     @updatedAt
-
-}
-
-
-
 model UserSettings {
   userId         String @id             
   currency       String    
@@ -54,7 +39,7 @@ model Transaction {
 }
 
 model Category {
-    id            String  @id @default(cuid())
+    
     name          String   
     icon          String   
     type          String   @default("income")
@@ -66,20 +51,24 @@ model Category {
 }
 
 model MonthHistory {
-    id            String @id @default(cuid()) 
+    
     day           Int
     month         Int
     year          Int
     income        Float
     expense       Float
     userId        String 
+    
+    @@id([day,month, year, userId])
 }
 
 model YearHistory {
-    id            String @id @default(cuid()) 
+   
     month         Int
     year          Int
     income        Int
     expense       Int
     userId        String  
+
+     @@id([month, year, userId])
 }
