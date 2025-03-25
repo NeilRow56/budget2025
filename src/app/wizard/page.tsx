@@ -10,6 +10,8 @@ import {
   CardTitle
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { Currencies } from '@/lib/currencies'
+import { prisma } from '@/lib/prisma'
 import { currentUser } from '@clerk/nextjs/server'
 
 import Link from 'next/link'
@@ -21,6 +23,16 @@ export default async function WizardPage() {
   if (!user) {
     redirect('/sign-in')
   }
+
+  // const userSettings = await prisma.userSettings.findUnique({
+  //   where: {
+  //     userId: user.id
+  //   }
+  // })
+
+  // if (!userSettings?.currency) return
+
+  // console.log(userSettings)
   return (
     <div className='container flex max-w-2xl flex-col items-center justify-between gap-4'>
       <div>

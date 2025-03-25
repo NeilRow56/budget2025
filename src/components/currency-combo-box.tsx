@@ -24,6 +24,7 @@ import SkeletonWrapper from './skeleton-wrapper'
 
 import { toast } from 'sonner'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import { prisma } from '@/lib/prisma'
 
 export function CurrencyComboBox() {
   const [open, setOpen] = React.useState(false)
@@ -37,7 +38,7 @@ export function CurrencyComboBox() {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button variant='outline' className='w-[150px] justify-start'>
-            {selectedOption ? <>{selectedOption.label}</> : <>+ Set status</>}
+            {selectedOption ? <>{selectedOption.label}</> : <>+ Set currency</>}
           </Button>
         </PopoverTrigger>
         <PopoverContent className='w-[200px] p-0' align='start'>
@@ -51,7 +52,7 @@ export function CurrencyComboBox() {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button variant='outline' className='w-[150px] justify-start'>
-          {selectedOption ? <>{selectedOption.label}</> : <>+ Set status</>}
+          {selectedOption ? <>{selectedOption.label}</> : <>+ Set currency</>}
         </Button>
       </DrawerTrigger>
       <DrawerContent>
