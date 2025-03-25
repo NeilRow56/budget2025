@@ -59,7 +59,7 @@ function DesktopNavbar() {
         </div>
         <div className='flex items-center gap-2'>
           <ThemeToggle />
-          <UserButton />
+          {/* <UserButton /> */}
         </div>
       </nav>
     </div>

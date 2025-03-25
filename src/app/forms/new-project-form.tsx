@@ -18,8 +18,9 @@ import {
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { insertProjectSchema } from '../schemas/currency'
+import { SubmitButton } from '@/components/shared/submit-button'
 
-export default function FormPage() {
+export default function NewProjectForm() {
   const form = useForm<z.infer<typeof insertProjectSchema>>({
     resolver: zodResolver(insertProjectSchema),
     defaultValues: {
@@ -46,16 +47,16 @@ export default function FormPage() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='mx-auto w-[700px] max-w-3xl space-y-8 py-10'
+        className='mx-auto w-[350px] space-y-8 py-10 md:w-[500px] lg:w-[700px]'
       >
         <FormField
           control={form.control}
           name='name'
           render={({ field }) => (
-            <FormItem>
+            <FormItem className='w-'>
               <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder='Project name' {...field} />
+              <FormControl className=''>
+                <Input className='' placeholder='Project name' {...field} />
               </FormControl>
             </FormItem>
           )}
@@ -73,7 +74,8 @@ export default function FormPage() {
           )}
         />
 
-        <Button type='submit'>Submit</Button>
+        {/* <Button type='submit'>Submit</Button> */}
+        <SubmitButton text='Submit' variant='default' />
       </form>
     </Form>
   )

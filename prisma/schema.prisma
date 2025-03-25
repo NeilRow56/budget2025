@@ -16,39 +16,101 @@ enum UserRole {
  USER
 }
 
-model UserSettings {
-  userId         String @id             
-  currency       String    
-  
-          
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum AccountType {
+  CURRENT
+  SAVINGS
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum RecurringInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
+}
+
+
+model User {
+  id            String    @id @default(uuid())
+  clerkUserId   String    @unique // clerk user id
+  email         String    @unique
+  name          String?
+  imageUrl      String?
+  transactions  Transaction[]
+  accounts      Account[]
+  budgets       Budget[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("users")
+}
+
+model Account {
+  id           String        @id @default(uuid())
+  name         String
+  type         AccountType
+  balance      Decimal       @default(0) // will ask inital balance while creating an account
+  isDefault    Boolean       @default(false)
+  userId       String
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([userId])
+  @@map("accounts")
 }
 
 model Transaction {
-    id            String  @id @default(cuid())
-    createdAt     DateTime    @default(now())
-    updatedAt     DateTime    @updatedAt
-    amount        Float
-    description   String  
-    date          DateTime        
-    type          String      @default("income")
-    category      String
-    categoryIcon  String
-    userId        String 
+  id                String            @id @default(uuid())
+  type             TransactionType
+  amount           Decimal
+  description      String?
+  date             DateTime
+  category         String           
+  receiptUrl       String?
+  isRecurring      Boolean           @default(false)
+  recurringInterval RecurringInterval? // Only used if isRecurring is true
+  nextRecurringDate DateTime?         // Next date for recurring transaction
+  lastProcessed    DateTime?         // Last time this recurring transaction was processed
+  status           TransactionStatus  @default(COMPLETED)
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountId        String
+  account          Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
 
-    
+  @@index([userId])
+  @@index([accountId])
+  @@map("transactions")
 }
 
-model Category {
-    
-    name          String   
-    icon          String   
-    type          String   @default("income")
-    createdAt     DateTime @default(now())
-    userId        String   
-    
 
-    @@unique([name, userId, type])
+model Budget {
+  id          String       @id @default(uuid())
+  amount      Decimal
+  lastAlertSent DateTime?  // Track when the last alert was sent
+  userId      String       @unique
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([userId])
+  @@map("budgets")
 }
+
 
 model MonthHistory {
     
@@ -71,4 +133,26 @@ model YearHistory {
     userId        String  
 
      @@id([month, year, userId])
+}
+
+model book_categories {
+  category_id         Int                   @id @default(autoincrement())
+  category_name       String                @db.VarChar(255)
+  
+}
+
+
+
+model books {
+  book_id             Int                   @id @default(autoincrement())
+  isbn                String                @db.VarChar(13)
+  name                String                @db.VarChar(255)
+  author              String                @db.VarChar(80)
+  no_of_copies        Int                   @db.SmallInt
+  is_active           Boolean               @default(true)
+  publish_year        Int                   @db.SmallInt
+  created_at          DateTime              @default(now()) @db.Timestamp(0)
+  updated_at          DateTime              @default(now()) @db.Timestamp(0)
+  
+  
 }
