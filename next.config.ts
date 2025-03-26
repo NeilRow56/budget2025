@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: 'images.pexels.com' },
       { protocol: 'https', hostname: 'img.clerk.com' },
+      { protocol: 'https', hostname: 'randomuser.me' },
       {
         protocol: 'https',
         hostname: 'job_3_blob.vercel-storage.com',
