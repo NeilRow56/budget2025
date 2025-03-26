@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Logo, LogoMobile } from './logo'
 import { ThemeToggle } from './theme-toggle'
 import { usePathname } from 'next/navigation'
@@ -28,7 +28,7 @@ export default function Navbar() {
 const items = [
   {
     name: 'Dashboard',
-    href: '/'
+    href: '/dashboard'
   },
   {
     name: 'Manage',
@@ -45,6 +45,11 @@ const items = [
 ]
 
 function DesktopNavbar() {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
   return (
     <div className='bg-background hidden border-separate border-b md:block'>
       <nav className='container mx-auto flex items-center justify-between px-8'>
@@ -59,7 +64,7 @@ function DesktopNavbar() {
         </div>
         <div className='flex items-center gap-2'>
           <ThemeToggle />
-          {/* <UserButton /> */}
+          {isClient && <UserButton />}
         </div>
       </nav>
     </div>
@@ -68,7 +73,11 @@ function DesktopNavbar() {
 
 function MobileNavbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
   return (
     <div className='bg-background block border-separate md:hidden'>
       <nav className='container flex items-center justify-between px-8'>
@@ -97,7 +106,7 @@ function MobileNavbar() {
           <LogoMobile />
         </div>
         <ThemeToggle />
-        <UserButton />
+        {isClient && <UserButton />}
       </nav>
     </div>
   )
